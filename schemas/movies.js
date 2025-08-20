@@ -32,7 +32,7 @@ const movieSchema = z.object({
 });
 
 export function validateMovie(input) {
-  // para valdar que realmente sea un movie
+  // para validar que realmente sea un movie
   return movieSchema.safeParse(input);
 }
 
