@@ -37,4 +37,7 @@ Content-Type: application/json
   "year": 2010
 }
 
+### leer archivo de texto
+GET http://localhost:1234/movies/text
+
 
