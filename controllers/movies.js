@@ -1,5 +1,7 @@
 import { MovieModel } from '../models/movie.js'
 import { validateMovie, validarPartialMovie } from '../schemas/movies.js'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export class MovieController {
     // aqui recupera la request y la response 
@@ -35,7 +37,7 @@ export class MovieController {
       }
       return res.json({ message: 'Movie deleted' });
     }
-    static async update(req, res){ 
+    static async update(req, res){
         const result = validarPartialMovie(req.body)
         if(!result.success){
             return res.status(400).json({error: JSON.parse(result.error.message)})
@@ -44,6 +46,16 @@ export class MovieController {
         const { id } = req.params
         const updatedMovie = await MovieModel.update({id, input: result.data})
 
-        return res.status(200).json(updatedMovie) 
+        return res.status(200).json(updatedMovie)
+    }
+
+    static async getText (req, res) {
+        try {
+            const filePath = join(process.cwd(), 'movies.txt')
+            const content = await readFile(filePath, 'utf8')
+            res.type('text/plain').send(content)
+        } catch (e) {
+            res.status(500).json({ message: 'Error reading text file' })
+        }
     }
 }
